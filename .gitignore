@@ -1,0 +1,108 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.IO;
+
+namespace WindowsFormsApplication3
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+         string inp = "";
+         inp = textBox1.Text;
+         cal(inp);
+        
+        //Console.Write("Press any key to continue . . . ");
+         //Console.ReadKey(true); //暫停畫面
+        }
+        static void cal(string input1)
+        {
+            string input = "";
+            string[] str, str1;
+            int i, big, t;
+            int[] num = new int[100];
+
+            str1 = input1.Split(",\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            //num = new int[str1.Length]; //str.Length為取得陣列str的元素個數
+            i = 0;
+            while (i < str1.Length)
+            {
+                num[i] = Convert.ToInt32(str1[i]); //字串轉數值
+                i++;
+            }
+
+            //讀取檔案
+            StreamReader sr = new StreamReader("homework1test.txt", Encoding.UTF8); //建立檔案串流，讀檔，Encoding.UTF8代表使用UTF-8編碼；為了處理全形的逗號
+            while (!sr.EndOfStream) //讀取檔案內容直到檔尾，將內容存入input
+            {
+                input = sr.ReadToEnd();
+            }
+            sr.Close(); //關閉檔案串流
+
+            str = input.Split(",\r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            //Split()把一行字串分成多個子字串
+            //"，\r\n".ToCharArray()代表以，和特殊字元\r以及特殊字元\n區隔字串
+            //StringSplitOptions.RemoveEmptyEntries是分割選項，用來移除空的字串
+
+            //將字串轉成數值
+            //num = new int[str.Length+i]; //str.Length為取得陣列str的元素個數
+            t = 0;
+            int g = 0;
+            //textBox1.Text = num[0].ToString();
+            while (t < str.Length)
+            {
+                num[t + i] = Convert.ToInt32(str[t]); //字串轉數值
+                t++;
+            }
+            for (int count1 = 0; count1 <= i + t - 1; count1++)//做排序 
+            {
+                for (int count2 = 1; count2 < i + t; count2++)
+                {
+                    if (num[count2 - 1] > num[count2])
+                    {
+                        big = num[count2 - 1];
+                        num[count2 - 1] = num[count2];
+                        num[count2] = big;
+                    }
+                }
+            }
+
+            //印出陣列str以及陣列num的內容
+            StreamWriter sw = new StreamWriter("homework1test.txt");
+            i = 0;
+            while (i < str.Length + str1.Length)
+            {
+                // Console.WriteLine("str[{0}] = {1}", i, str[i]);
+                i++;
+            }
+            Console.Write("\n");
+            i = 0;
+            while (i < str.Length + str1.Length)
+            {
+                Console.WriteLine("num[{0}] = {1}", i, num[i]);
+                sw.Write(num[i]);
+                sw.Write(",");
+                i++;
+            }
+            sw.Close();
+        }
+        }
+       // static void cal(string input1)
+       // {
+        
+   // }
+}
+
+        
